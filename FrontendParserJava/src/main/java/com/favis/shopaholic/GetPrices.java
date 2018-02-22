@@ -3,6 +3,7 @@ package com.favis.shopaholic;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
@@ -11,6 +12,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
+import java.util.Set;
 
 public class GetPrices {
 
@@ -20,15 +22,20 @@ public class GetPrices {
 
 
     GetPrices(){
-        DesiredCapabilities capability = DesiredCapabilities.chrome();
+        ChromeOptions chromeOptions = new ChromeOptions();
 
         try {
-            webDriver = new RemoteWebDriver(new URL("http://192.168.3.240:4444/wd/hub"), capability);
+            webDriver = new RemoteWebDriver(new URL("http://192.168.3.240:4444/wd/hub"), chromeOptions);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
         getUrlsAndLocators();
     }
+
+//    protected void finalize() throws Throwable {
+//        webDriver.quit();
+//        super.finalize();
+//    }
 
     private void getUrlsAndLocators(){
         urlsProp = new Properties();
@@ -47,7 +54,10 @@ public class GetPrices {
 
     public void getAllPrices(){
 
-        System.out.println(getPrice(urlsProp.getProperty("alienware_aw3418dw")));
+        Set <String> keys = urlsProp.stringPropertyNames();
+        for(String key : keys) {
+            System.out.println(getPrice(urlsProp.getProperty(key)));
+        }
     }
 
     public String getPrice(String url){
@@ -56,6 +66,9 @@ public class GetPrices {
         if(url.contains("https://www.bestbuy.com")){
             return getBestbuyItemPrice();
         }
+        else if(url.contains("https://www.amazon.com") || url.contains("https://smile.amazon.com")){
+            return getAmazonItemPrice();
+        }
         else
             return "SITE: " + url + " NOT SUPPORTED";
     }
@@ -63,5 +76,10 @@ public class GetPrices {
     private String getBestbuyItemPrice(){
         WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("bestbuy.price_tag_locator")));
         return locator.getAttribute(locatorsProp.getProperty("bestbuy.price_attribute"));
+    }
+
+    private String getAmazonItemPrice(){
+        WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("amazon.price_tag_locator")));
+        return locator.getText().replace("$","");
     }
 }
