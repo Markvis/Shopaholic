@@ -1,0 +1,2 @@
+#!/bin/sh
+python price_sniffer.py
