@@ -4,13 +4,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Properties;
 import java.util.Set;
 
@@ -32,10 +32,10 @@ public class GetPrices {
         getUrlsAndLocators();
     }
 
-//    protected void finalize() throws Throwable {
-//        webDriver.quit();
-//        super.finalize();
-//    }
+    protected void finalize() throws Throwable {
+        cleanUp();
+        super.finalize();
+    }
 
     private void getUrlsAndLocators(){
         urlsProp = new Properties();
@@ -52,12 +52,19 @@ public class GetPrices {
         }
     }
 
-    public void getAllPrices(){
+    public HashMap<String, String> getAllPrices(){
+
+        HashMap<String,String> pricesMap = new HashMap<String, String>();
 
         Set <String> keys = urlsProp.stringPropertyNames();
         for(String key : keys) {
-            System.out.println(getPrice(urlsProp.getProperty(key)));
+            String price = getPrice(urlsProp.getProperty(key));
+            pricesMap.put(key, price);
         }
+
+        cleanUp();
+
+        return pricesMap;
     }
 
     public String getPrice(String url){
@@ -81,5 +88,9 @@ public class GetPrices {
     private String getAmazonItemPrice(){
         WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("amazon.price_tag_locator")));
         return locator.getText().replace("$","");
+    }
+
+    private void cleanUp(){
+        webDriver.quit();
     }
 }
