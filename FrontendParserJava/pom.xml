@@ -20,6 +20,16 @@
             <artifactId>selenium-remote-driver</artifactId>
             <version>3.9.1</version>
         </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>6.0.6</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -43,7 +53,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>com.favis.shopaholic.Runner</mainClass>
+                    <mainClass>com.favis.shopaholic.Shopaholic</mainClass>
                 </configuration>
             </plugin>
             <plugin>
@@ -52,7 +62,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.favis.shopaholic.Runner</mainClass>
+                            <mainClass>com.favis.shopaholic.Shopaholic</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -10,26 +10,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
-public class GetPrices {
+public class WebCrawler {
 
     private static WebDriver webDriver;
-    private static Properties urlsProp;
-    private static Properties locatorsProp;
+    private Properties locatorsProp;
 
 
-    GetPrices(){
+    WebCrawler(){
         ChromeOptions chromeOptions = new ChromeOptions();
 
         try {
-            webDriver = new RemoteWebDriver(new URL("http://192.168.3.240:4444/wd/hub"), chromeOptions);
+            webDriver = new RemoteWebDriver(new URL(PropertyReader.getProperty("selenium.grid.url")), chromeOptions);
+            getLocators();
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-        getUrlsAndLocators();
     }
 
     protected void finalize() throws Throwable {
@@ -37,43 +34,38 @@ public class GetPrices {
         super.finalize();
     }
 
-    private void getUrlsAndLocators(){
-        urlsProp = new Properties();
+    private void getLocators(){
         locatorsProp = new Properties();
         ClassLoader loader = Thread.currentThread().getContextClassLoader();
-        InputStream urlStream = loader.getResourceAsStream("urls.properties");;
         InputStream locatorsStream = loader.getResourceAsStream("locators.properties");
 
         try {
-            urlsProp.load(urlStream);
             locatorsProp.load(locatorsStream);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public HashMap<String, String> getAllPrices(){
-
-        HashMap<String,String> pricesMap = new HashMap<String, String>();
-
-        Set <String> keys = urlsProp.stringPropertyNames();
-        for(String key : keys) {
-            String price = getPrice(urlsProp.getProperty(key));
-            pricesMap.put(key, price);
-        }
-
-        cleanUp();
-
-        return pricesMap;
-    }
+//    public List<Double> getPriceForItem(String item_name){
+//
+//        ArrayList<Double> prices = new ArrayList<Double>();
+//
+//        List <String> itemURLs = DatabaseControl.getURLsForItem(item_name);
+//        for(String url : itemURLs) {
+//            String price = getPrice(url);
+//            prices.add(Double.valueOf(price));
+//        }
+//
+//        return prices;
+//    }
 
     public String getPrice(String url){
         webDriver.get(url);
 
-        if(url.contains("https://www.bestbuy.com")){
+        if(url.contains("bestbuy.com")){
             return getBestbuyItemPrice();
         }
-        else if(url.contains("https://www.amazon.com") || url.contains("https://smile.amazon.com")){
+        else if(url.contains("amazon.com")){
             return getAmazonItemPrice();
         }
         else
