@@ -1,9 +1,10 @@
 package com.favis.shopaholic.containers;
 
 import java.math.BigDecimal;
+import java.util.Comparator;
 import java.util.List;
 
-public class Item {
+public class Item implements Comparable<Item>, Comparator<Item> {
 
     private String item_name;
     private List<ItemURL> item_urls;
@@ -88,4 +89,13 @@ public class Item {
         this.item_name = item_name;
     }
 
+    @Override
+    public int compare(Item o1, Item o2) {
+        return o1.getItem_name().compareTo(o2.getItem_name());
+    }
+
+    @Override
+    public int compareTo(Item o) {
+        return item_name.compareTo(o.getItem_name());
+    }
 }

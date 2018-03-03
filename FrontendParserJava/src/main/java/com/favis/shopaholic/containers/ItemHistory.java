@@ -9,12 +9,30 @@ public class ItemHistory {
     private String store_name;
     private BigDecimal item_price;
     private Date date;
+    private String url;
 
     public ItemHistory(String item_name, String store_name, BigDecimal item_price, Date date) {
         this.item_name = item_name;
         this.store_name = store_name;
         this.item_price = item_price;
         this.date = date;
+        this.url = null;
+    }
+
+    public ItemHistory(String item_name, String store_name, BigDecimal item_price, Date date, String url) {
+        this.item_name = item_name;
+        this.store_name = store_name;
+        this.item_price = item_price;
+        this.date = date;
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getItem_name() {

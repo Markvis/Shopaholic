@@ -148,6 +148,10 @@ public class DatabaseControl {
         }
     }
 
+    private void updateItemsListInDB(List<Item> items){
+
+    }
+
     protected void finalize() throws Throwable {
         try {
             conn.close();

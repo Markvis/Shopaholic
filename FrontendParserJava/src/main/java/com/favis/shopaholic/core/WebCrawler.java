@@ -60,8 +60,8 @@ public class WebCrawler {
                 String price = getPriceFromItemURL(itemURL);
                 Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
                 BigDecimal bd = BigDecimal.valueOf(Double.parseDouble(price));
-                if(!price.equals("-31337")) {
-                    itemHistories.add(new ItemHistory(itemURL.getItem_name(), itemURL.getStore_name(), bd, date));
+                if (!price.equals("-31337")) {
+                    itemHistories.add(new ItemHistory(itemURL.getItem_name(), itemURL.getStore_name(), bd, date, itemURL.getUrl()));
                 }
             }
         }
