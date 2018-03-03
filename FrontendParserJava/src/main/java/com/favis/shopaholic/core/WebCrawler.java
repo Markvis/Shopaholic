@@ -60,7 +60,9 @@ public class WebCrawler {
                 String price = getPriceFromItemURL(itemURL);
                 Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
                 BigDecimal bd = BigDecimal.valueOf(Double.parseDouble(price));
-                itemHistories.add(new ItemHistory(itemURL.getItem_name(), itemURL.getStore_name(), bd, date));
+                if(!price.equals("-31337")) {
+                    itemHistories.add(new ItemHistory(itemURL.getItem_name(), itemURL.getStore_name(), bd, date));
+                }
             }
         }
 
@@ -68,7 +70,7 @@ public class WebCrawler {
     }
 
     private String getPriceFromItemURL(ItemURL itemURL) {
-        System.out.println("Navigating to: " + itemURL.getUrl());
+//        System.out.println("Navigating to: " + itemURL.getUrl());
         webDriver.get(itemURL.getUrl());
 
         if (itemURL.getStore_name().equals("bestbuy")) {

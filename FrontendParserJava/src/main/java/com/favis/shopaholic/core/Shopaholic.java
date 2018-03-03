@@ -11,12 +11,15 @@ public class Shopaholic {
         DatabaseControl databaseControl = new DatabaseControl();
 
         // get db items
+        System.out.println("Getting items...");
         List<Item> items = databaseControl.getItems();
 
         // crawl sites
+        System.out.println("Getting prices...");
         WebCrawler webCrawler = new WebCrawler();
         List<ItemHistory> itemHistories =  webCrawler.getItemPrices(items);
 
+        System.out.println("Inserting items...");
         databaseControl.insertItemHistories(itemHistories);
 
         // print item_name of items list

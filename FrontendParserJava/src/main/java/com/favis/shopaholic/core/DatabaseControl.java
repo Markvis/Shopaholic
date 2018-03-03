@@ -11,21 +11,6 @@ import java.util.List;
 public class DatabaseControl {
     private Connection conn;
 
-    public static void storeData() {
-
-    }
-
-    private static void printResultSet(ResultSet rs) {
-        try {
-            while (rs.next()) {
-                System.out.println(rs.getString("item_name"));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
     private List<String> convertResultSetToStringList(ResultSet rs) {
         ArrayList<String> list = new ArrayList<String>();
 
@@ -43,20 +28,20 @@ public class DatabaseControl {
     private Connection connect() {
         conn = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(
                     PropertyReader.getProperty("mysql.url"),
                     PropertyReader.getProperty("mysql.username"),
                     PropertyReader.getProperty("mysql.password"));
         } catch (Exception e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         return conn;
     }
 
     private ResultSet executeQuery(String query) {
         ResultSet rs = null;
-        System.out.println(query);
+//        System.out.println(query);
 
         try {
             Statement stmt = connect().createStatement();
@@ -142,7 +127,7 @@ public class DatabaseControl {
 
     public void insertItemHistories(List<ItemHistory> itemHistories) {
         for (ItemHistory itemHistory : itemHistories) {
-            System.out.println("Inserting " + itemHistory.getItem_name() + " to the DB...");
+//            System.out.println("Inserting " + itemHistory.getItem_name() + " to the DB...");
             String query = "INSERT INTO `Shopaholic`.`item_history` " +
                     "(`item_name`, " +
                     "`store_name`, " +
@@ -154,7 +139,7 @@ public class DatabaseControl {
                     "'" + itemHistory.getItem_price() + "', " +
                     "'" + itemHistory.getDate() + "'); ";
             try {
-                System.out.println(query);
+//                System.out.println(query);
                 Statement stmt = connect().createStatement();
                 stmt.executeUpdate(query);
             }catch (SQLException e){
