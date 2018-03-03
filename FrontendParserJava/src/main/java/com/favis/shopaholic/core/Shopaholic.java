@@ -1,6 +1,7 @@
 package com.favis.shopaholic.core;
 
 import com.favis.shopaholic.containers.Item;
+import com.favis.shopaholic.containers.ItemHistory;
 
 import java.util.List;
 
@@ -14,12 +15,14 @@ public class Shopaholic {
 
         // crawl sites
         WebCrawler webCrawler = new WebCrawler();
-        webCrawler.getItemPrices(items);
+        List<ItemHistory> itemHistories =  webCrawler.getItemPrices(items);
+
+        databaseControl.insertItemHistories(itemHistories);
 
         // print item_name of items list
-        for (Item item : items) {
-            System.out.println(item.getItem_name());
-        }
+//        for (Item item : items) {
+//            System.out.println(item.getItem_name());
+//        }
 
     }
 

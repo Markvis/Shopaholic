@@ -89,7 +89,7 @@ public class WebCrawler {
             WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("amazon.price_tag_locator")));
             return locator.getText().replace("$", "");
         } catch (Exception e) {
-            return "-1";
+            return "-31337";
         }
     }
 

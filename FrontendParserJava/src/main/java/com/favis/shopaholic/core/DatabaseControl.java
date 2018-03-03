@@ -140,6 +140,29 @@ public class DatabaseControl {
         return itemHistories;
     }
 
+    public void insertItemHistories(List<ItemHistory> itemHistories) {
+        for (ItemHistory itemHistory : itemHistories) {
+            System.out.println("Inserting " + itemHistory.getItem_name() + " to the DB...");
+            String query = "INSERT INTO `Shopaholic`.`item_history` " +
+                    "(`item_name`, " +
+                    "`store_name`, " +
+                    "`item_price`, " +
+                    "`date`) " +
+                    "VALUES " +
+                    "('" + itemHistory.getItem_name() + "', " +
+                    "'" + itemHistory.getStore_name() + "', " +
+                    "'" + itemHistory.getItem_price() + "', " +
+                    "'" + itemHistory.getDate() + "'); ";
+            try {
+                System.out.println(query);
+                Statement stmt = connect().createStatement();
+                stmt.executeUpdate(query);
+            }catch (SQLException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
     protected void finalize() throws Throwable {
         try {
             conn.close();
