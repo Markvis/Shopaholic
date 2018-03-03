@@ -1,4 +1,4 @@
-package com.favis.shopaholic;
+package com.favis.shopaholic.core;
 
 import java.io.IOException;
 import java.io.InputStream;

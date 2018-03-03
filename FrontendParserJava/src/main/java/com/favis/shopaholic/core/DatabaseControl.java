@@ -1,4 +1,8 @@
-package com.favis.shopaholic;
+package com.favis.shopaholic.core;
+
+import com.favis.shopaholic.containers.Item;
+import com.favis.shopaholic.containers.ItemHistory;
+import com.favis.shopaholic.containers.ItemURL;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -71,22 +75,31 @@ public class DatabaseControl {
         return convertResultSetToStringList(rs);
     }
 
-    public List<Item> getItems(){
+    public List<Item> getItems() {
         ArrayList<Item> items = new ArrayList<Item>();
         List<String> item_names = getItemNamesList();
 
-        for (String item_name : item_names){
+        for (String item_name : item_names) {
             items.add(getItem(item_name));
         }
 
         return items;
     }
 
-    private List<String> getURLsForItem(String item_name) {
-        String query = "SELECT `item_urls`.`item_url` FROM `Shopaholic`.`item_urls` WHERE `item_urls`.`item_name` LIKE '" + item_name + "';";
+    private List<ItemURL> getURLsForItem(String item_name) {
+        String query = "SELECT * FROM `Shopaholic`.`item_urls` WHERE `item_urls`.`item_name` LIKE '" + item_name + "';";
         ResultSet rs = executeQuery(query);
+        ArrayList<ItemURL> itemURLs = new ArrayList<ItemURL>();
 
-        return convertResultSetToStringList(rs);
+        try {
+            while (rs.next()) {
+                itemURLs.add(new ItemURL(item_name, rs.getString("store_name"), rs.getString("item_url")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return itemURLs;
     }
 
     public Item getItem(String item_name) {
@@ -109,6 +122,22 @@ public class DatabaseControl {
         }
 
         return item;
+    }
+
+    public List<ItemHistory> getItemHistories(String item_name) {
+        String query = "SELECT * FROM `Shopaholic`.`item_history` WHERE `item_history`.`item_name` LIKE '" + item_name + "';";
+        ResultSet rs = executeQuery(query);
+        ArrayList<ItemHistory> itemHistories = new ArrayList<ItemHistory>();
+
+        try {
+            while (rs.next()) {
+                itemHistories.add(new ItemHistory(item_name, rs.getString("store_name"), rs.getBigDecimal("item_price"), rs.getDate("date")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return itemHistories;
     }
 
     protected void finalize() throws Throwable {

@@ -1,4 +1,4 @@
-package com.favis.shopaholic;
+package com.favis.shopaholic.core;
 
 import com.sun.mail.smtp.SMTPTransport;
 import java.security.Security;

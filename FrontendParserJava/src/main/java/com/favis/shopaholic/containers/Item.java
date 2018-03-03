@@ -1,4 +1,4 @@
-package com.favis.shopaholic;
+package com.favis.shopaholic.containers;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 public class Item {
 
     private String item_name;
-    private List<String> item_urls;
+    private List<ItemURL> item_urls;
     private String item_desc;
     private BigDecimal item_msrp;
     private BigDecimal item_min_price;
@@ -17,13 +17,11 @@ public class Item {
     public Item(String item_name) {
         this.item_name = item_name;
         this.item_urls = null;
-
     }
 
-    public Item(String item_name, List<String> item_urls) {
+    public Item(String item_name, List<ItemURL> item_urls) {
         this.item_name = item_name;
         this.item_urls = item_urls;
-
     }
 
     public String getItem_desc() {
@@ -74,11 +72,11 @@ public class Item {
         this.item_min_store_name = item_min_store_name;
     }
 
-    public List<String> getItem_urls() {
+    public List<ItemURL> getItem_urls() {
         return item_urls;
     }
 
-    public void setItem_urls(List<String> item_urls) {
+    public void setItem_urls(List<ItemURL> item_urls) {
         this.item_urls = item_urls;
     }
 
