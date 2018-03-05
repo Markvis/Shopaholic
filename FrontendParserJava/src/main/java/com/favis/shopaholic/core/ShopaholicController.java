@@ -12,45 +12,51 @@ public class ShopaholicController {
     public void checkCurrentValue(List<Item> items, List<ItemHistory> itemHistories) {
         Collections.sort(items);
 
+        DatabaseControl databaseControl = new DatabaseControl();
+
         for (ItemHistory itemHistory : itemHistories) {
-//            Item item = getItem(items, itemHistory.getItem_name());
             Integer index = Collections.binarySearch(items, new Item(itemHistory.getItem_name()));
             Item item = items.get(index);
 
-            // set latest price
-            item.setItem_latest_price(itemHistory.getItem_price());
+            // set latest_price
+//            item.setItem_latest_price(itemHistory.getItem_price());
 
             // set min and storename
-            if(itemHistory.getItem_price().compareTo(item.getItem_min_price()) < 0){
+            if (itemHistory.getItem_price().compareTo(item.getItem_min_price()) < 0) {
                 item.setItem_min_price(itemHistory.getItem_price());
                 item.setItem_min_store_name(itemHistory.getStore_name());
             }
             // set max price
-            if(itemHistory.getItem_price().compareTo(item.getItem_max_price()) > 0) {
+            if (itemHistory.getItem_price().compareTo(item.getItem_max_price()) > 0) {
                 item.setItem_max_price(itemHistory.getItem_price());
             }
             // Last if statement
-            if(itemHistory.getItem_price().compareTo(item.getItem_msrp()) < 0){
+            if (itemHistory.getItem_price().compareTo(item.getItem_msrp()) < 0) {
                 sendMail(itemHistory);
             }
+
+            // set new item values
+            items.set(index,item);
+
+            // update db of changes
+            databaseControl.updateItemInDB(item);
+
         }
 
+        // UPDATE ITEMS in DB
+//        DatabaseControl databaseControl = new DatabaseControl();
+//        databaseControl.updateItemsListInDB(items);
     }
 
-    private Item getItem(List<Item> items, String item_name) {
-
-        for (Item item : items) {
-            if (item.getItem_name().equals(item_name))
-                return item;
-        }
-
-        return null;
-    }
-
-    private void sendMail(ItemHistory itemHistory){
+    private void sendMail(ItemHistory itemHistory) {
         try {
-            GoogleMail.Send(PropertyReader.getProperty("email.username"),
-                    PropertyReader.getProperty("email.app.password"),
+//            GoogleMail.Send(PropertyReader.getProperty("email.username"),
+//                    PropertyReader.getProperty("email.app.password"),
+//                    "favismark@gmail.com",
+//                    "Shopaholic: " + itemHistory.getItem_name() + " $" + itemHistory.getItem_price() + " @ " + itemHistory.getStore_name(),
+//                    itemHistory.getUrl());
+            GoogleMail.Send(System.getProperty("email.username"),
+                    System.getProperty("email.app.password"),
                     "favismark@gmail.com",
                     "Shopaholic: " + itemHistory.getItem_name() + " $" + itemHistory.getItem_price() + " @ " + itemHistory.getStore_name(),
                     itemHistory.getUrl());

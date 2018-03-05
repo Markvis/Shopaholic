@@ -27,7 +27,8 @@ public class WebCrawler {
         ChromeOptions chromeOptions = new ChromeOptions();
 
         try {
-            webDriver = new RemoteWebDriver(new URL(PropertyReader.getProperty("selenium.grid.url")), chromeOptions);
+//            webDriver = new RemoteWebDriver(new URL(PropertyReader.getProperty("selenium.grid.url")), chromeOptions);
+            webDriver = new RemoteWebDriver(new URL(System.getProperty("selenium.grid.url")), chromeOptions);
             getLocators();
         } catch (MalformedURLException e) {
             e.printStackTrace();

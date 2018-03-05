@@ -29,10 +29,14 @@ public class DatabaseControl {
         conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
+//            conn = DriverManager.getConnection(
+//                    PropertyReader.getProperty("mysql.url"),
+//                    PropertyReader.getProperty("mysql.username"),
+//                    PropertyReader.getProperty("mysql.password"));
             conn = DriverManager.getConnection(
-                    PropertyReader.getProperty("mysql.url"),
-                    PropertyReader.getProperty("mysql.username"),
-                    PropertyReader.getProperty("mysql.password"));
+                    System.getProperty("mysql.url"),
+                    System.getProperty("mysql.username"),
+                    System.getProperty("mysql.password"));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -142,13 +146,35 @@ public class DatabaseControl {
 //                System.out.println(query);
                 Statement stmt = connect().createStatement();
                 stmt.executeUpdate(query);
-            }catch (SQLException e){
+            } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
     }
 
-    private void updateItemsListInDB(List<Item> items){
+    public void updateItemInDB(Item item) {
+        String query = "UPDATE `Shopaholic`.`items` " +
+                "SET `item_msrp`='" + item.getItem_msrp() + "'," +
+                " `item_min_price`='" + item.getItem_min_price() + "'," +
+                " `item_max_price`='" + item.getItem_max_price() + "'," +
+                " `item_latest_price`='" + item.getItem_msrp() + "'," +
+                " `item_min_store_name`='" + item.getItem_min_store_name() + "' " +
+                "WHERE `item_name` ='" + item.getItem_name() + "';";
+        try {
+//            System.out.println("UPDATING " + item.getItem_name());
+//            System.out.println(query);
+            Statement stmt = connect().createStatement();
+            stmt.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateItemsListInDB(List<Item> items) {
+
+        for (Item item : items) {
+            updateItemInDB(item);
+        }
 
     }
 
