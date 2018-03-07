@@ -15,7 +15,9 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 public class WebCrawler {
 
@@ -74,26 +76,27 @@ public class WebCrawler {
 //        System.out.println("Navigating to: " + itemURL.getUrl());
         webDriver.get(itemURL.getUrl());
 
-        if (itemURL.getStore_name().equals("bestbuy")) {
-            return getBestbuyItemPrice();
-        } else if (itemURL.getStore_name().equals("amazon")) {
-            return getAmazonItemPrice();
-        } else
-            return "SITE: " + itemURL.getUrl() + " NOT SUPPORTED";
-    }
-
-    private String getBestbuyItemPrice() {
-        WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("bestbuy.price_tag_locator")));
-        return locator.getAttribute(locatorsProp.getProperty("bestbuy.price_attribute")).replaceAll(delimiters,"");
-    }
-
-    private String getAmazonItemPrice() {
         try {
-            WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("amazon.price_tag_locator")));
-            return locator.getText().replaceAll(delimiters, "");
+            if (itemURL.getStore_name().equals("bestbuy")) {
+                return getBestbuyItemPrice();
+            } else if (itemURL.getStore_name().equals("amazon")) {
+                return getAmazonItemPrice();
+            } else
+                return "SITE: " + itemURL.getUrl() + " NOT SUPPORTED";
         } catch (Exception e) {
             return "-31337";
         }
+    }
+
+    private String getBestbuyItemPrice() throws Exception {
+        WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("bestbuy.price_tag_locator")));
+        return locator.getAttribute(locatorsProp.getProperty("bestbuy.price_attribute")).replaceAll(delimiters, "");
+
+    }
+
+    private String getAmazonItemPrice() throws Exception {
+        WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("amazon.price_tag_locator")));
+        return locator.getText().replaceAll(delimiters, "");
     }
 
     private void cleanUp() {
