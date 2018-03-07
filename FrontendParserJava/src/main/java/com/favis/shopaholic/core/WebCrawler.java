@@ -21,7 +21,7 @@ public class WebCrawler {
 
     private static WebDriver webDriver;
     private Properties locatorsProp;
-
+    private String delimiters = "[\\$\\,]";
 
     WebCrawler() {
         ChromeOptions chromeOptions = new ChromeOptions();
@@ -84,13 +84,13 @@ public class WebCrawler {
 
     private String getBestbuyItemPrice() {
         WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("bestbuy.price_tag_locator")));
-        return locator.getAttribute(locatorsProp.getProperty("bestbuy.price_attribute"));
+        return locator.getAttribute(locatorsProp.getProperty("bestbuy.price_attribute")).replaceAll(delimiters,"");
     }
 
     private String getAmazonItemPrice() {
         try {
             WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("amazon.price_tag_locator")));
-            return locator.getText().replace("$", "");
+            return locator.getText().replaceAll(delimiters, "");
         } catch (Exception e) {
             return "-31337";
         }
