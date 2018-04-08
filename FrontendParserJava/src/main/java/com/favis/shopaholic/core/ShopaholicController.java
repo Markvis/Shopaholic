@@ -50,11 +50,6 @@ public class ShopaholicController {
 
     private void sendMail(ItemHistory itemHistory) {
         try {
-//            GoogleMail.Send(PropertyReader.getProperty("email.username"),
-//                    PropertyReader.getProperty("email.app.password"),
-//                    "favismark@gmail.com",
-//                    "Shopaholic: " + itemHistory.getItem_name() + " $" + itemHistory.getItem_price() + " @ " + itemHistory.getStore_name(),
-//                    itemHistory.getUrl());
             GoogleMail.Send(System.getProperty("email.username"),
                     System.getProperty("email.app.password"),
                     System.getProperty("email.recipient"),
