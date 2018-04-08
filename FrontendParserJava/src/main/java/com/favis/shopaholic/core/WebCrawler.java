@@ -81,6 +81,10 @@ public class WebCrawler {
                 return getBestbuyItemPrice();
             } else if (itemURL.getStore_name().equals("amazon")) {
                 return getAmazonItemPrice();
+            } else if (itemURL.getStore_name().equals("newegg")) {
+                return getNeweggItemPrice();
+            } else if (itemURL.getStore_name().equals("bhphotovideo")) {
+                return getBnHPhotoItemPrice();
             } else
                 return "SITE: " + itemURL.getUrl() + " NOT SUPPORTED";
         } catch (Exception e) {
@@ -91,12 +95,21 @@ public class WebCrawler {
     private String getBestbuyItemPrice() throws Exception {
         WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("bestbuy.price_tag_locator")));
         return locator.getAttribute(locatorsProp.getProperty("bestbuy.price_attribute")).replaceAll(delimiters, "");
-
     }
 
     private String getAmazonItemPrice() throws Exception {
         WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("amazon.price_tag_locator")));
         return locator.getText().replaceAll(delimiters, "");
+    }
+
+    private String getNeweggItemPrice() throws Exception {
+        WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("newegg.price_tag_locator")));
+        return locator.getText().replaceAll(delimiters, "");
+    }
+
+    private String getBnHPhotoItemPrice() throws Exception {
+        WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("bhphotovideo.price_tag_locator")));
+        return locator.getAttribute("content");
     }
 
     private void cleanUp() {
