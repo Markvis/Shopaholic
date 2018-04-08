@@ -57,7 +57,7 @@ public class ShopaholicController {
 //                    itemHistory.getUrl());
             GoogleMail.Send(System.getProperty("email.username"),
                     System.getProperty("email.app.password"),
-                    "favismark@gmail.com",
+                    System.getProperty("email.recipient"),
                     "Shopaholic: " + itemHistory.getItem_name() + " $" + itemHistory.getItem_price() + " @ " + itemHistory.getStore_name(),
                     itemHistory.getUrl());
         } catch (MessagingException e) {
@@ -69,7 +69,7 @@ public class ShopaholicController {
         try {
             GoogleMail.Send(PropertyReader.getProperty("email.username"),
                     PropertyReader.getProperty("email.app.password"),
-                    "favismark@gmail.com",
+                    System.getProperty("email.recipient"),
                     "TEST MAIL",
                     "TEST MAIL");
         } catch (MessagingException e) {
