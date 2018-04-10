@@ -73,6 +73,7 @@ public class WebCrawler {
     }
 
     private String getPriceFromItemURL(ItemURL itemURL) {
+        System.out.println("Fetching price for: " + itemURL.getItem_name());
 //        System.out.println("Navigating to: " + itemURL.getUrl());
         webDriver.get(itemURL.getUrl());
 
