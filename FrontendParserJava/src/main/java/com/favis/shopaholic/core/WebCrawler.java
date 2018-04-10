@@ -3,6 +3,7 @@ package com.favis.shopaholic.core;
 import com.favis.shopaholic.containers.Item;
 import com.favis.shopaholic.containers.ItemHistory;
 import com.favis.shopaholic.containers.ItemURL;
+import com.favis.shopaholic.util.Debugger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,7 +22,7 @@ import java.util.Properties;
 
 public class WebCrawler {
 
-    private static WebDriver webDriver;
+    private WebDriver webDriver;
     private Properties locatorsProp;
     private String delimiters = "[\\$\\,]";
 
@@ -54,6 +55,21 @@ public class WebCrawler {
         }
     }
 
+    public List<ItemHistory> getItemPrices(Item item){
+        List<ItemHistory> itemHistories = new ArrayList<ItemHistory>();
+
+        for (ItemURL itemURL : item.getItem_urls()) {
+            String price = getPriceFromItemURL(itemURL);
+            Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+            BigDecimal bd = BigDecimal.valueOf(Double.parseDouble(price));
+            if (!price.equals("-31337")) {
+                itemHistories.add(new ItemHistory(itemURL.getItem_name(), itemURL.getStore_name(), bd, date, itemURL.getUrl()));
+            }
+        }
+
+        return itemHistories;
+    }
+
     public List<ItemHistory> getItemPrices(List<Item> items) {
 
         List<ItemHistory> itemHistories = new ArrayList<ItemHistory>();
@@ -73,8 +89,8 @@ public class WebCrawler {
     }
 
     private String getPriceFromItemURL(ItemURL itemURL) {
-        System.out.println("Fetching price for: " + itemURL.getItem_name());
-//        System.out.println("Navigating to: " + itemURL.getUrl());
+        Debugger.log("Fetching price for: " + itemURL.getItem_name());
+        Debugger.log("Navigating to: " + itemURL.getUrl());
         webDriver.get(itemURL.getUrl());
 
         try {
@@ -120,7 +136,7 @@ public class WebCrawler {
         return locator.getText().replaceAll(delimiters, "");
     }
 
-    private void cleanUp() {
+    public void cleanUp() {
         webDriver.quit();
     }
 }
