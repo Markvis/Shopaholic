@@ -9,6 +9,7 @@ import java.util.List;
 public class Shopaholic {
 
     public static void main(String... args) {
+//        PropertyReader.localRun();
 
         setDebugger();
 

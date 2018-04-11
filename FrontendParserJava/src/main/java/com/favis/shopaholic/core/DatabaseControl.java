@@ -29,10 +29,6 @@ public class DatabaseControl {
         conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-//            conn = DriverManager.getConnection(
-//                    PropertyReader.getProperty("mysql.url"),
-//                    PropertyReader.getProperty("mysql.username"),
-//                    PropertyReader.getProperty("mysql.password"));
             conn = DriverManager.getConnection(
                     System.getProperty("mysql.url"),
                     System.getProperty("mysql.username"),
