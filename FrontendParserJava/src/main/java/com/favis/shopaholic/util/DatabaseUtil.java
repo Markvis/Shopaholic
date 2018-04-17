@@ -1,15 +1,14 @@
-package com.favis.shopaholic.core;
+package com.favis.shopaholic.util;
 
 import com.favis.shopaholic.containers.Item;
 import com.favis.shopaholic.containers.ItemHistory;
 import com.favis.shopaholic.containers.ItemURL;
-import com.favis.shopaholic.util.Debugger;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DatabaseControl {
+public class DatabaseUtil {
 
     private Connection connect() {
         Connection conn;

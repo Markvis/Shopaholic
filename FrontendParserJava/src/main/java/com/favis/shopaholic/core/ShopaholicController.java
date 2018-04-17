@@ -2,6 +2,9 @@ package com.favis.shopaholic.core;
 
 import com.favis.shopaholic.containers.Item;
 import com.favis.shopaholic.containers.ItemHistory;
+import com.favis.shopaholic.util.DatabaseUtil;
+import com.favis.shopaholic.util.GoogleMail;
+import com.favis.shopaholic.util.PropertyReader;
 
 import javax.mail.MessagingException;
 import java.util.Collections;
@@ -12,7 +15,7 @@ public class ShopaholicController {
     public void checkCurrentValue(List<Item> items, List<ItemHistory> itemHistories) {
         Collections.sort(items);
 
-        DatabaseControl databaseControl = new DatabaseControl();
+        DatabaseUtil databaseUtil = new DatabaseUtil();
 
         for (ItemHistory itemHistory : itemHistories) {
             Integer index = Collections.binarySearch(items, new Item(itemHistory.getItem_name()));
@@ -39,13 +42,13 @@ public class ShopaholicController {
             items.set(index,item);
 
             // update db of changes
-            databaseControl.updateItemInDB(item);
+            databaseUtil.updateItemInDB(item);
 
         }
 
         // UPDATE ITEMS in DB
-//        DatabaseControl databaseControl = new DatabaseControl();
-//        databaseControl.updateItemsListInDB(items);
+//        DatabaseUtil databaseUtil = new DatabaseUtil();
+//        databaseUtil.updateItemsListInDB(items);
     }
 
     private void sendMail(ItemHistory itemHistory) {

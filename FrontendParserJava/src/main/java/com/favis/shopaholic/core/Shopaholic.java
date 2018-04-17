@@ -2,6 +2,7 @@ package com.favis.shopaholic.core;
 
 import com.favis.shopaholic.containers.Item;
 import com.favis.shopaholic.containers.ItemHistory;
+import com.favis.shopaholic.util.DatabaseUtil;
 import com.favis.shopaholic.util.Debugger;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +14,10 @@ public class Shopaholic {
 
         setDebugger();
 
-        DatabaseControl databaseControl = new DatabaseControl();
+        DatabaseUtil databaseUtil = new DatabaseUtil();
 
         System.out.println("Getting items...");
-        List<Item> items = databaseControl.getItems();
+        List<Item> items = databaseUtil.getItems();
 
         List<ItemHistory> itemHistories;
 
@@ -32,7 +33,7 @@ public class Shopaholic {
         }
 
         System.out.println("Inserting items...");
-        databaseControl.insertItemHistories(itemHistories);
+        databaseUtil.insertItemHistories(itemHistories);
 
         System.out.println("Comparing current prices...");
         ShopaholicController shopaholicController = new ShopaholicController();
