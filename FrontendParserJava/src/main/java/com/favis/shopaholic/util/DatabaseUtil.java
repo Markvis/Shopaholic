@@ -164,9 +164,11 @@ public class DatabaseUtil {
     }
 
     public void insertItemHistories(List<ItemHistory> itemHistories) {
+        Connection conn = null;
+        conn = connect();
         for (ItemHistory itemHistory : itemHistories) {
             Debugger.log("Inserting " + itemHistory.getItem_name() + " to the DB...");
-            Connection conn = null;
+//            Connection conn = null;
             PreparedStatement ps = null;
 
             String query = "INSERT INTO `Shopaholic`.`item_history` " +
@@ -181,7 +183,7 @@ public class DatabaseUtil {
                     "'" + itemHistory.getDate() + "'); ";
 
             try {
-                conn = connect();
+//                conn = connect();
                 ps = conn.prepareStatement(query);
                 ps.executeUpdate();
             } catch (SQLException e) {
