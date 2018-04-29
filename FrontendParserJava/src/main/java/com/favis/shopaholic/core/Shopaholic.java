@@ -36,8 +36,8 @@ public class Shopaholic {
         long startTime = System.nanoTime();
         databaseUtil.insertItemHistories(itemHistories);
         long endTime = System.nanoTime();
-        long totalTime = endTime - startTime;
-        System.out.println("DB insert took " + totalTime/1000 + " seconds to complete");
+        double totalTime = (double)(endTime - startTime) / 1000000000.0;
+        System.out.println("DB insert took " + totalTime + " seconds to complete");
 
         System.out.println("Comparing current prices...");
         ShopaholicController shopaholicController = new ShopaholicController();
