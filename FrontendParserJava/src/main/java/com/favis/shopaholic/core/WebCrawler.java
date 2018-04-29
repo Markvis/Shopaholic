@@ -65,6 +65,7 @@ public class WebCrawler {
 //            if (!price.equals("-31337")) {
 //                itemHistories.add(new ItemHistory(itemURL.getItem_name(), itemURL.getStore_name(), bd, date, itemURL.getUrl()));
 //            }
+            itemHistories.add(new ItemHistory(itemURL.getItem_name(), itemURL.getStore_name(), bd, date, itemURL.getUrl()));
         }
 
         return itemHistories;
