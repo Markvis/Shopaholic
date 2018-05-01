@@ -25,7 +25,7 @@ public class ShopaholicController {
 
             BigDecimal currentPrice = itemHistory.getItem_price();
 
-            if(currentPrice != errorValue) {
+            if(!currentPrice.equals(errorValue)) {
                 // set latest_price
 //              item.setItem_latest_price(itemHistory.getItem_price());
 
