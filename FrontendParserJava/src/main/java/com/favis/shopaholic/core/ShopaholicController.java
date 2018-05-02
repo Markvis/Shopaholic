@@ -25,7 +25,7 @@ public class ShopaholicController {
 
             BigDecimal currentPrice = itemHistory.getItem_price();
 
-            if(!currentPrice.equals(errorValue)) {
+            if(currentPrice.compareTo(errorValue) != 0) {
                 // set latest_price
 //              item.setItem_latest_price(itemHistory.getItem_price());
 
@@ -66,18 +66,6 @@ public class ShopaholicController {
                     System.getProperty("email.recipient"),
                     "Shopaholic: " + itemHistory.getItem_name() + " $" + itemHistory.getItem_price() + " @ " + itemHistory.getStore_name(),
                     itemHistory.getUrl());
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void sendTestMail() {
-        try {
-            GoogleMail.Send(PropertyReader.getProperty("email.username"),
-                    PropertyReader.getProperty("email.app.password"),
-                    System.getProperty("email.recipient"),
-                    "TEST MAIL",
-                    "TEST MAIL");
         } catch (MessagingException e) {
             e.printStackTrace();
         }
