@@ -58,12 +58,16 @@ public class WebCrawler {
     public List<ItemHistory> getItemPrices(Item item){
         List<ItemHistory> itemHistories = new ArrayList<ItemHistory>();
 
+        long startTime = System.nanoTime();
         for (ItemURL itemURL : item.getItem_urls()) {
             String price = getPriceFromItemURL(itemURL);
             Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
             BigDecimal bd = BigDecimal.valueOf(Double.parseDouble(price));
             itemHistories.add(new ItemHistory(itemURL.getItem_name(), itemURL.getStore_name(), bd, date, itemURL.getUrl()));
         }
+        long endTime = System.nanoTime();
+        double totalTime = (double)(endTime - startTime) / 1000000000.0;
+        System.out.println(item.getItem_name() + " took " + totalTime + " seconds to execute");
 
         return itemHistories;
     }

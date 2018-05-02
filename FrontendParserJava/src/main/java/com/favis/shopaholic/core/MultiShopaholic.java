@@ -20,13 +20,9 @@ public class MultiShopaholic implements Runnable {
 
     public void run() {
         Debugger.log("Getting prices for " + threadName + "...");
-        long startTime = System.nanoTime();
         WebCrawler webCrawler = new WebCrawler();
         itemHistories =  webCrawler.getItemPrices(item);
         webCrawler.cleanUp();
-        long endTime = System.nanoTime();
-        double totalTime = (double)(endTime - startTime) / 1000000000.0;
-        System.out.println(threadName + " took " + totalTime + " seconds to execute");
         Debugger.log("Thread " +  threadName + " exiting.");
     }
 
