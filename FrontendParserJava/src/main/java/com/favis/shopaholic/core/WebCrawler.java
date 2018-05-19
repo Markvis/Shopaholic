@@ -104,6 +104,8 @@ public class WebCrawler {
                 return getBnHPhotoItemPrice();
             } else if (itemURL.getStore_name().equals("dell")) {
                 return getDellItemPrice();
+            } else if (itemURL.getStore_name().equals("gog")) {
+                return getGOGItemPrice();
             } else
                 return "SITE: " + itemURL.getUrl() + " NOT SUPPORTED";
         } catch (Exception e) {
@@ -134,6 +136,11 @@ public class WebCrawler {
     private String getDellItemPrice() throws Exception {
         WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("dell.price_tag_locator")));
         return locator.getText().replaceAll(delimiters, "");
+    }
+
+    private String getGOGItemPrice() throws Exception {
+        WebElement locator = webDriver.findElement(By.xpath(locatorsProp.getProperty("gog.price_tag_locator")));
+        return locator.getAttribute("content");
     }
 
     public void cleanUp() {
