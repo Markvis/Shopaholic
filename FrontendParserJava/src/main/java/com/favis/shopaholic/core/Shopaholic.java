@@ -45,20 +45,41 @@ public class Shopaholic {
     }
 
     private static List<ItemHistory> getItemHistories(List<Item> items){
+        int maxThreadCount = 2;
         ArrayList<ItemHistory> itemHistories = new ArrayList<ItemHistory>();
-        ArrayList<MultiShopaholic> threads = new ArrayList<MultiShopaholic>();
+        ArrayList<MultiShopaholic> newThreads = new ArrayList<MultiShopaholic>();
+        ArrayList<MultiShopaholic> startedThreads = new ArrayList<MultiShopaholic>();
+        ArrayList<MultiShopaholic> completedThreads = new ArrayList<MultiShopaholic>();
 
+        // create new threads
         for(Integer i = 0; i < items.size(); i++){
             MultiShopaholic multiShopaholic = new MultiShopaholic(items.get(i).getItem_name()+"_thread", items.get(i));
-            multiShopaholic.start();
-            threads.add(multiShopaholic);
+            newThreads.add(multiShopaholic);
         }
 
         try {
-            for(MultiShopaholic multiShopaholic : threads){
-                multiShopaholic.getThread().join();
+            while(newThreads.size() > 0){
+                // start threads and move to started
+                while(startedThreads.size() < maxThreadCount) {
+                    MultiShopaholic multiShopaholic = newThreads.get(0);
+                    multiShopaholic.start();
+                    startedThreads.add(multiShopaholic);
+                    newThreads.remove(multiShopaholic);
+                }
+
+                // move completed threads to completedThread
+                for(MultiShopaholic multiShopaholic : startedThreads){
+                    if(!multiShopaholic.getThread().isAlive()) {
+                        completedThreads.add(multiShopaholic);
+                        startedThreads.remove(multiShopaholic);
+                    }
+                }
+
+                Thread.sleep(500);
             }
-            for(MultiShopaholic multiShopaholic : threads) {
+
+            // save items
+            for(MultiShopaholic multiShopaholic : completedThreads) {
                 itemHistories.addAll(multiShopaholic.getItemHistories());
             }
         } catch ( Exception e) {
@@ -66,6 +87,10 @@ public class Shopaholic {
         }
 
         return itemHistories;
+    }
+
+    private void startThread(){
+
     }
 
     private static void setDebugger(){
