@@ -48,7 +48,7 @@ public class Shopaholic {
     }
 
     private static List<ItemHistory> getItemHistories(List<Item> items){
-        Integer maxThreadCount = Integer.valueOf(PropertyReader.getProperty("selenium.grid.node.size"));
+        Integer maxThreadCount = Integer.valueOf(System.getProperty("selenium.grid.node.size"));
         ArrayList<ItemHistory> itemHistories = new ArrayList<ItemHistory>();
         CopyOnWriteArrayList<MultiShopaholic> newThreads = new CopyOnWriteArrayList<MultiShopaholic>();
         CopyOnWriteArrayList<MultiShopaholic> startedThreads = new CopyOnWriteArrayList<MultiShopaholic>();
