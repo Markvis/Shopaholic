@@ -13,7 +13,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Shopaholic {
 
     public static void main(String... args) {
-//        PropertyReader.localRun();
+        if(PropertyReader.getProperty("local.run").equals("true")) {
+            PropertyReader.localRun();
+        }
 
         setDebugger();
 
@@ -69,9 +71,7 @@ public class Shopaholic {
                     startedThreads.add(multiShopaholic);
                     newThreads.remove(multiShopaholic);
 
-                    Debugger.log("newThreads size = " + newThreads.size());
-                    Debugger.log("startedThreads size = " + startedThreads.size());
-                    Debugger.log("completedThreads size = " + completedThreads.size());
+                    Debugger.log(multiShopaholic.getThread().getName() + " thread started");
                 }
 
                 // move completed threads to completedThread
@@ -85,10 +85,6 @@ public class Shopaholic {
                 Thread.sleep(1000);
             }
 
-            Debugger.log("newThreads size = " + newThreads.size());
-            Debugger.log("startedThreads size = " + startedThreads.size());
-            Debugger.log("completedThreads size = " + completedThreads.size());
-
             assert(completedThreads.size() == items.size());
 
             // save items
@@ -98,8 +94,8 @@ public class Shopaholic {
 
             return itemHistories;
         } catch ( Exception e) {
-            e.printStackTrace();
             Debugger.log("Interrupted");
+            e.printStackTrace();
         }
 
         return null;
