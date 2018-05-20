@@ -13,7 +13,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Shopaholic {
 
     public static void main(String... args) {
-        PropertyReader.localRun();
+//        PropertyReader.localRun();
 
         setDebugger();
 
