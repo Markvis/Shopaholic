@@ -4,13 +4,16 @@ import com.favis.shopaholic.containers.Item;
 import com.favis.shopaholic.containers.ItemHistory;
 import com.favis.shopaholic.util.DatabaseUtil;
 import com.favis.shopaholic.util.Debugger;
+import com.favis.shopaholic.util.PropertyReader;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Shopaholic {
 
     public static void main(String... args) {
-//        PropertyReader.localRun();
+        PropertyReader.localRun();
 
         setDebugger();
 
@@ -45,11 +48,11 @@ public class Shopaholic {
     }
 
     private static List<ItemHistory> getItemHistories(List<Item> items){
-        int maxThreadCount = 2;
+        Integer maxThreadCount = Integer.valueOf(PropertyReader.getProperty("selenium.grid.node.size"));
         ArrayList<ItemHistory> itemHistories = new ArrayList<ItemHistory>();
-        ArrayList<MultiShopaholic> newThreads = new ArrayList<MultiShopaholic>();
-        ArrayList<MultiShopaholic> startedThreads = new ArrayList<MultiShopaholic>();
-        ArrayList<MultiShopaholic> completedThreads = new ArrayList<MultiShopaholic>();
+        CopyOnWriteArrayList<MultiShopaholic> newThreads = new CopyOnWriteArrayList<MultiShopaholic>();
+        CopyOnWriteArrayList<MultiShopaholic> startedThreads = new CopyOnWriteArrayList<MultiShopaholic>();
+        CopyOnWriteArrayList<MultiShopaholic> completedThreads = new CopyOnWriteArrayList<MultiShopaholic>();
 
         // create new threads
         for(Integer i = 0; i < items.size(); i++){
@@ -58,13 +61,17 @@ public class Shopaholic {
         }
 
         try {
-            while(newThreads.size() > 0){
+            while(completedThreads.size() != items.size()){
                 // start threads and move to started
-                while(startedThreads.size() < maxThreadCount) {
+                while(startedThreads.size() < maxThreadCount && newThreads.size() > 0) {
                     MultiShopaholic multiShopaholic = newThreads.get(0);
                     multiShopaholic.start();
                     startedThreads.add(multiShopaholic);
                     newThreads.remove(multiShopaholic);
+
+                    Debugger.log("newThreads size = " + newThreads.size());
+                    Debugger.log("startedThreads size = " + startedThreads.size());
+                    Debugger.log("completedThreads size = " + completedThreads.size());
                 }
 
                 // move completed threads to completedThread
@@ -75,22 +82,27 @@ public class Shopaholic {
                     }
                 }
 
-                Thread.sleep(500);
+                Thread.sleep(1000);
             }
+
+            Debugger.log("newThreads size = " + newThreads.size());
+            Debugger.log("startedThreads size = " + startedThreads.size());
+            Debugger.log("completedThreads size = " + completedThreads.size());
+
+            assert(completedThreads.size() == items.size());
 
             // save items
             for(MultiShopaholic multiShopaholic : completedThreads) {
                 itemHistories.addAll(multiShopaholic.getItemHistories());
             }
+
+            return itemHistories;
         } catch ( Exception e) {
+            e.printStackTrace();
             Debugger.log("Interrupted");
         }
 
-        return itemHistories;
-    }
-
-    private void startThread(){
-
+        return null;
     }
 
     private static void setDebugger(){
