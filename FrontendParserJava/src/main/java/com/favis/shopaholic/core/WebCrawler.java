@@ -7,10 +7,8 @@ import com.favis.shopaholic.util.Debugger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-//import org.openqa.selenium.chrome.ChromeOptions;
-//import org.openqa.selenium.firefox.FirefoxOptions;
-//import org.openqa.selenium.remote.RemoteWebDriver;
-
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -21,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class WebCrawler {
 
@@ -30,17 +27,16 @@ public class WebCrawler {
     private String delimiters = "[\\$\\,]";
 
     WebCrawler() {
-        webDriver = new HtmlUnitDriver();
-//        ChromeOptions chromeOptions = new ChromeOptions();
-//        chromeOptions.addArguments("--headless --no-sandbox");
-//
-//        try {
-//            webDriver = new RemoteWebDriver(new URL(System.getProperty("selenium.grid.url")), chromeOptions);
-//            webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//            getLocators();
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        }
+        ChromeOptions chromeOptions = new ChromeOptions();
+        chromeOptions.addArguments("--headless --no-sandbox");
+
+        try {
+            webDriver = new RemoteWebDriver(new URL(System.getProperty("selenium.grid.url")), chromeOptions);
+            webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+            getLocators();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void finalize() throws Throwable {
