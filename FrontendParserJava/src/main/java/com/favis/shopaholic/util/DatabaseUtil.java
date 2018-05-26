@@ -6,7 +6,9 @@ import com.favis.shopaholic.containers.ItemURL;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DatabaseUtil {
 
@@ -229,5 +231,87 @@ public class DatabaseUtil {
                 s.printStackTrace();
             }
         }
+    }
+
+    public List<ItemURL> getItemsAndURLByStore(String storeName){
+        ResultSet rs = null;
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ArrayList<ItemURL> itemURLs = new ArrayList<ItemURL>();
+        String query = "SELECT * FROM `Shopaholic`.`item_urls` WHERE `item_urls`.`store_name` LIKE '" + storeName + "';";
+
+        try {
+            conn = connect();
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                itemURLs.add(new ItemURL(rs.getString("item_name"), rs.getString("store_name"), rs.getString("item_url")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }finally {
+            try{
+                if(rs != null){rs.close();}
+                if(ps != null){ps.close();}
+                if(conn != null){conn.close();}
+            }catch (SQLException s){
+                s.printStackTrace();
+            }
+        }
+
+        return itemURLs;
+    }
+
+    public List<String> getStoreNames(){
+
+        ArrayList<String> storeNames = new ArrayList<String>();
+        String query = "SELECT DISTINCT `store_name` FROM `Shopaholic`.`item_urls`;";
+
+        List<Map<String,String>> listData = getSqlQuery(query);
+        for(Map<String,String> data : listData){
+            storeNames.add(data.get("store_name"));
+        }
+        System.out.println(storeNames);
+
+        return storeNames;
+    }
+
+    public List<Map<String,String>> getSqlQuery(String query){
+        ResultSet rs = null;
+        Connection con = null;
+        PreparedStatement ps = null;
+        List<Map<String,String>> data = null;
+
+        try {
+            con = connect();
+            ps = con.prepareStatement(query);
+            rs = ps.executeQuery(query);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            List<String> columns = new ArrayList<String>(rsmd.getColumnCount());
+            for(int i = 1; i <= rsmd.getColumnCount(); i++){
+                columns.add(rsmd.getColumnName(i));
+            }
+            data = new ArrayList<Map<String,String>>();
+            while(rs.next()){
+                Map<String,String> row = new HashMap<String, String>(columns.size());
+                for(String col : columns) {
+                    row.put(col, rs.getString(col));
+                }
+                data.add(row);
+            }
+//            System.out.println(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            try{
+                if(rs != null){rs.close();}
+                if(ps != null){ps.close();}
+                if(con != null){con.close();}
+            }catch (SQLException s){
+                s.printStackTrace();
+            }
+        }
+
+        return data;
     }
 }

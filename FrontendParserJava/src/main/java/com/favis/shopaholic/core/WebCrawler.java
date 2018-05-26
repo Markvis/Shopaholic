@@ -7,8 +7,9 @@ import com.favis.shopaholic.util.Debugger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.RemoteWebDriver;
+//import org.openqa.selenium.chrome.ChromeOptions;
+//import org.openqa.selenium.firefox.FirefoxOptions;
+//import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +20,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 public class WebCrawler {
 
@@ -27,15 +30,17 @@ public class WebCrawler {
     private String delimiters = "[\\$\\,]";
 
     WebCrawler() {
-        ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--headless");
-
-        try {
-            webDriver = new RemoteWebDriver(new URL(System.getProperty("selenium.grid.url")), chromeOptions);
-            getLocators();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        webDriver = new HtmlUnitDriver();
+//        ChromeOptions chromeOptions = new ChromeOptions();
+//        chromeOptions.addArguments("--headless --no-sandbox");
+//
+//        try {
+//            webDriver = new RemoteWebDriver(new URL(System.getProperty("selenium.grid.url")), chromeOptions);
+//            webDriver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+//            getLocators();
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
     }
 
     protected void finalize() throws Throwable {
@@ -83,6 +88,20 @@ public class WebCrawler {
                 BigDecimal bd = BigDecimal.valueOf(Double.parseDouble(price));
                 itemHistories.add(new ItemHistory(itemURL.getItem_name(), itemURL.getStore_name(), bd, date, itemURL.getUrl()));
             }
+        }
+
+        return itemHistories;
+    }
+
+    public List<ItemHistory> getItemPricesWithURLList(List<ItemURL> itemURLList) {
+
+        List<ItemHistory> itemHistories = new ArrayList<ItemHistory>();
+
+        for (ItemURL itemURL : itemURLList) {
+            String price = getPriceFromItemURL(itemURL);
+            Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+            BigDecimal bd = BigDecimal.valueOf(Double.parseDouble(price));
+            itemHistories.add(new ItemHistory(itemURL.getItem_name(), itemURL.getStore_name(), bd, date, itemURL.getUrl()));
         }
 
         return itemHistories;
