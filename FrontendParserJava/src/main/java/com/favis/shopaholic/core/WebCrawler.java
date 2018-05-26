@@ -28,7 +28,8 @@ public class WebCrawler {
 
     WebCrawler() {
         ChromeOptions chromeOptions = new ChromeOptions();
-        chromeOptions.addArguments("--headless");
+        chromeOptions.addArguments("headless");
+        chromeOptions.addArguments("windows-size=1200x600");
 
         try {
             webDriver = new RemoteWebDriver(new URL(System.getProperty("selenium.grid.url")), chromeOptions);
